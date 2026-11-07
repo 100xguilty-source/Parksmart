@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>ParkSmart | Smart Parking Monitor</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--panel2:#17243a;--text:#edf4ff;--muted:#9aabc2;--green:#35d39a;--red:#ff6b72;--blue:#75a7ff;--line:#263650}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#1b3150 0,transparent 35%),var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:1080px;margin:auto;padding:28px 20px 48px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#4f8cff,#35d39a);display:grid;place-items:center;font-size:23px}
+    h1{font-size:clamp(25px,4vw,38px);margin:0;letter-spacing:-1px}.sub{color:var(--muted);margin:5px 0 0}.pill{border:1px solid var(--line);border-radius:999px;padding:8px 13px;color:var(--muted);font-size:13px}
+    .hero{margin:28px 0 22px;padding:25px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(120deg,#172943,#111c2e)}
+    .hero h2{margin:0 0 6px;font-size:23px}.hero p{margin:0;color:var(--muted);max-width:700px}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.stat,.slot,.settings{background:var(--panel);border:1px solid var(--line);border-radius:18px}
+    .stat{padding:17px}.stat span{display:block;color:var(--muted);font-size:13px}.stat strong{font-size:30px;letter-spacing:-1px}
+    .sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 13px}.sectionhead h2{font-size:19px;margin:0}
+    .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.slot{padding:18px;min-height:158px;transition:border-color .2s}.slot .car{font-size:27px;margin:12px 0}.slot h3{margin:0;font-size:16px}.status{font-weight:700;font-size:13px}.available{color:var(--green)}.occupied{color:var(--red)}
+    .settings{margin-top:22px;padding:19px}.settings p{color:var(--muted);font-size:13px;margin:6px 0 14px}.controls{display:flex;gap:10px;flex-wrap:wrap}.controls input{flex:1;min-width:220px;background:#0b1423;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit}
+    button{background:#3979ed;color:white;border:0;border-radius:10px;padding:11px 16px;font:600 14px system-ui;cursor:pointer}button.secondary{background:#263650;color:var(--text)}
+    .notice{margin-top:14px;padding:12px 14px;border-radius:12px;background:#1a2a42;color:#c5d5eb;font-size:13px}.notice strong{color:white}
+    footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
+    @media(max-width:760px){.slots{grid-template-columns:repeat(2,1fr)}}@media(max-width:440px){.stats{grid-template-columns:1fr}.slots{grid-template-columns:1fr 1fr}.wrap{padding:20px 14px 36px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div class="brand"><div class="logo">🅿</div><div><h1>ParkSmart</h1><p class="sub">Smart parking monitoring system</p></div></div>
+      <div class="pill" id="connection">● Demo mode</div>
+    </header>
+    <section class="hero">
+      <h2>Find a free parking spot faster.</h2>
+      <p>A four-slot prototype using an Arduino UNO R4 WiFi and ultrasonic sensors. Each sensor checks whether a vehicle is present and updates the parking status.</p>
+    </section>
+    <section class="stats" aria-label="Parking summary">
+      <div class="stat"><span>Total spaces</span><strong>4</strong></div>
+      <div class="stat"><span>Available</span><strong id="availableCount">4</strong></div>
+      <div class="stat"><span>Occupied</span><strong id="occupiedCount">0</strong></div>
+    </section>
+    <div class="sectionhead"><h2>Live parking status</h2><span class="pill" id="updated">Waiting for update</span></div>
+    <section class="slots" id="slots">
+      <article class="slot"><h3>Slot 1</h3><div class="car">🚗</div><div class="status available">● Available</div></article>
+      <article class="slot"><h3>Slot 2</h3><div class="car">🚙</div><div class="status available">● Available</div></article>
+      <article class="slot"><h3>Slot 3</h3><div class="car">🚘</div><div class="status available">● Available</div></article>
+      <article class="slot"><h3>Slot 4</h3><div class="car">🚗</div><div class="status available">● Available</div></article>
+    </section>
+    <section class="settings">
+      <h2 style="font-size:18px;margin:0">Connect your Arduino</h2>
+      <p>Enter the board's local IP address to try the <code>/status</code> endpoint. Example: <code>192.168.1.50</code>.</p>
+      <div class="controls"><input id="boardIp" inputmode="url" placeholder="Arduino IP address (e.g. 192.168.1.50)" aria-label="Arduino IP address"><button id="connectBtn">Connect</button><button class="secondary" id="demoBtn">Demo mode</button></div>
+      <div class="notice" id="message"><strong>Heads up:</strong> GitHub Pages is HTTPS, while a basic UNO R4 WiFi web server is usually HTTP. Browsers can block that cross-origin/insecure connection. For a reliable live demo, open the dashboard served directly by the Arduino on the same Wi-Fi network, or add a secure HTTPS bridge. This GitHub page works as the project showcase/demo.</div>
+    </section>
+    <footer>ParkSmart · First-year Mechanical Engineering EDI prototype · Arduino UNO R4 WiFi + 4 ultrasonic sensors</footer>
+  </main>
+<script>
+  const slotsEl=document.getElementById('slots');
+  const icons=['🚗','🚙','🚘','🚕'];
+  let timer=null;
+  function render(slots){
+    const occupied=slots.filter(Boolean).length;
+    document.getElementById('availableCount').textContent=slots.length-occupied;
+    document.getElementById('occupiedCount').textContent=occupied;
+    slotsEl.innerHTML=slots.map((busy,i)=>'<article class="slot"><h3>Slot '+(i+1)+'</h3><div class="car">'+icons[i]+'</div><div class="status '+(busy?'occupied':'available')+'">● '+(busy?'Occupied':'Available')+'</div></article>').join('');
+    document.getElementById('updated').textContent='Updated '+new Date().toLocaleTimeString();
+  }
+  function demo(){if(timer)clearInterval(timer);timer=null;document.getElementById('connection').textContent='● Demo mode';document.getElementById('message').innerHTML='<strong>Demo mode:</strong> Showing sample parking states. Connect to the Arduino from a page served on the same local network for live sensor readings.';render([false,false,false,false]);}
+  async function poll(ip){
+    try{
+      const response=await fetch('http://'+ip+'/status',{cache:'no-store'});
+      if(!response.ok)throw new Error('HTTP '+response.status);
+      const data=await response.json();
+      if(!Array.isArray(data.slots)||data.slots.length!==4)throw new Error('Expected JSON with a four-item slots array.');
+      render(data.slots.map(Boolean));
+      document.getElementById('connection').textContent='● Connected';
+      document.getElementById('message').textContent='Connected to '+ip+'. Status refreshes every 1.5 seconds.';
+    }catch(err){
+      document.getElementById('connection').textContent='● Not connected';
+      document.getElementById('message').innerHTML='<strong>Could not read the board:</strong> '+String(err.message).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))+'. Check the IP, Wi-Fi, Arduino server, and browser security restrictions.';
+    }
+  }
+  document.getElementById('connectBtn').addEventListener('click',()=>{
+    const ip=document.getElementById('boardIp').value.trim().replace(/^https?:\/\//,'').replace(/\/$/,'');
+    if(!ip){document.getElementById('message').textContent='Enter the Arduino IP address first.';return;}
+    if(timer)clearInterval(timer);
+    poll(ip);timer=setInterval(()=>poll(ip),1500);
+  });
+  document.getElementById('demoBtn').addEventListener('click',demo);
+  demo();
+</script>
+</body>
+</html>
