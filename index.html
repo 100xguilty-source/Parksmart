@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#101827">
-  <title>ParkSmart | Smart Parking Monitor</title>
+  <title>Spots | Smart Parking Monitor</title>
   <style>
     :root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--panel2:#17243a;--text:#edf4ff;--muted:#9aabc2;--green:#35d39a;--red:#ff6b72;--blue:#75a7ff;--line:#263650}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#1b3150 0,transparent 35%),var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
@@ -27,7 +27,7 @@
 <body>
   <main class="wrap">
     <header class="top">
-      <div class="brand"><div class="logo">🅿</div><div><h1>ParkSmart</h1><p class="sub">Smart parking monitoring system</p></div></div>
+      <div class="brand"><div class="logo">🅿</div><div><h1>Spots</h1><p class="sub">Smart parking monitoring system</p></div></div>
       <div class="pill" id="connection">● Demo mode</div>
     </header>
     <section class="hero">
@@ -52,7 +52,7 @@
       <div class="controls"><input id="boardIp" inputmode="url" placeholder="Arduino IP address (e.g. 192.168.1.50)" aria-label="Arduino IP address"><button id="connectBtn">Connect</button><button class="secondary" id="demoBtn">Demo mode</button></div>
       <div class="notice" id="message"><strong>Heads up:</strong> GitHub Pages is HTTPS, while a basic UNO R4 WiFi web server is usually HTTP. Browsers can block that cross-origin/insecure connection. For a reliable live demo, open the dashboard served directly by the Arduino on the same Wi-Fi network, or add a secure HTTPS bridge. This GitHub page works as the project showcase/demo.</div>
     </section>
-    <footer>ParkSmart · First-year Mechanical Engineering EDI prototype · Arduino UNO R4 WiFi + 4 ultrasonic sensors</footer>
+    <footer>Spots · First-year Mechanical Engineering EDI prototype · Arduino UNO R4 WiFi + 4 ultrasonic sensors</footer>
   </main>
 <script>
   const slotsEl=document.getElementById('slots');
